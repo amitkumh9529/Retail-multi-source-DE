@@ -1,0 +1,29 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables & secrets (NEVER commit to git)
+.env
+*.env
+!.env.example
+.github
+
+# Local SQLite databases & cache
+*.db
+.watermarks.db
+.pytest_cache/
+test-results.xml
+
+# Local Data Lake storage fallback
+data_lake_storage/
+dbt_retailpulse/target/
+dbt_retailpulse/dbt_packages/
+dbt_retailpulse/logs/
