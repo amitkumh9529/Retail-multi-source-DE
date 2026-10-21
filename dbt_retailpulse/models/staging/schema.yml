@@ -1,0 +1,94 @@
+version: 2
+
+models:
+  - name: stg_ecommerce__orders
+    description: "Staged clean e-commerce orders deduplicated on order_id"
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: order_status
+        tests:
+          - accepted_values:
+              values: ['created', 'paid', 'shipped', 'delivered', 'cancelled']
+      - name: total_order_amount
+        tests:
+          - not_null
+          - positive_or_zero
+
+  - name: stg_ecommerce__order_items
+    description: "Staged line items with surrogate keys"
+    columns:
+      - name: order_item_key
+        tests:
+          - unique
+          - not_null
+      - name: quantity
+        tests:
+          - not_null
+      - name: unit_price
+        tests:
+          - not_null
+          - positive_or_zero
+
+  - name: stg_pos__transactions
+    description: "Staged POS in-store register transactions"
+    columns:
+      - name: transaction_id
+        tests:
+          - unique
+          - not_null
+      - name: store_id
+        tests:
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+
+  - name: stg_pos__stores
+    description: "Staged store locations catalog"
+    columns:
+      - name: store_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_pos__products
+    description: "Staged retail product SKUs"
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_threepl__inventory
+    description: "Staged 3PL warehouse inventory daily snapshot"
+    columns:
+      - name: inventory_snapshot_key
+        tests:
+          - unique
+          - not_null
+      - name: on_hand_qty
+        tests:
+          - not_null
+          - positive_or_zero
+      - name: available_to_promise_qty
+        tests:
+          - not_null
+          - positive_or_zero
+
+  - name: stg_threepl__shipments
+    description: "Staged 3PL carrier logistics shipments"
+    columns:
+      - name: shipment_id
+        tests:
+          - unique
+          - not_null
+      - name: shipment_status
+        tests:
+          - accepted_values:
+              values: ['label_created', 'in_transit', 'delivered', 'returned']

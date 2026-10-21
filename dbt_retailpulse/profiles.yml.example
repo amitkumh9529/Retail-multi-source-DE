@@ -1,0 +1,25 @@
+retailpulse_profile:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'xy12345.us-east-1') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'RETAILPULSE_AIRFLOW_SVC') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD', '') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'RETAILPULSE_DBT_ROLE') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'RETAILPULSE_DW') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'RETAILPULSE_TRANSFORM_WH') }}"
+      schema: STAGING
+      threads: 4
+      client_session_keep_alive: False
+    prod:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: RETAILPULSE_DBT_ROLE
+      database: RETAILPULSE_DW
+      warehouse: RETAILPULSE_TRANSFORM_WH
+      schema: STAGING
+      threads: 8
+      client_session_keep_alive: False

@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: int_sales_omnichannel_unified
+    description: "Unified cross-channel sales combining e-commerce order items and POS register sales"
+    columns:
+      - name: omnichannel_transaction_key
+        tests:
+          - unique
+          - not_null
+      - name: sales_channel
+        tests:
+          - accepted_values:
+              values: ['ONLINE', 'IN_STORE']
+      - name: gross_revenue
+        tests:
+          - not_null
+
+  - name: int_inventory_daily_positions
+    description: "Daily inventory positions enriched with shipment volume and stock health alerts"
+    columns:
+      - name: inventory_snapshot_key
+        tests:
+          - unique
+          - not_null
+      - name: stock_health_status
+        tests:
+          - accepted_values:
+              values: ['OUT_OF_STOCK', 'LOW_STOCK_RISK', 'HEALTHY']

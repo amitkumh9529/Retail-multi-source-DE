@@ -1,0 +1,80 @@
+version: 2
+
+models:
+  - name: fct_omnichannel_transactions
+    description: "Production incremental fact table containing deduplicated, cleansed cross-channel sales"
+    columns:
+      - name: omnichannel_transaction_key
+        tests:
+          - unique
+          - not_null
+      - name: sales_channel
+        tests:
+          - accepted_values:
+              values: ['ONLINE', 'IN_STORE']
+      - name: store_id
+        tests:
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+      - name: quantity
+        tests:
+          - not_null
+      - name: net_revenue
+        tests:
+          - not_null
+
+  - name: fct_daily_sales_by_store
+    description: "Daily aggregated store and channel commercial performance metrics"
+    columns:
+      - name: daily_store_sales_key
+        tests:
+          - unique
+          - not_null
+      - name: transaction_date
+        tests:
+          - not_null
+      - name: total_gross_revenue
+        tests:
+          - not_null
+
+  - name: fct_order_fulfillment_sla
+    description: "E-commerce order fulfillment velocity and SLA breach analysis"
+    columns:
+      - name: fulfillment_key
+        tests:
+          - unique
+          - not_null
+      - name: fulfillment_sla_tier
+        tests:
+          - accepted_values:
+              values: ['MET_24H_SLA', 'MET_48H_SLA', 'SLA_BREACHED', 'UNFULFILLED']
+
+  - name: dim_customers
+    description: "Unified customer profile with RFM metrics and omnichannel channel segmentation"
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_channel_segment
+        tests:
+          - accepted_values:
+              values: ['TRUE_OMNICHANNEL', 'DIGITAL_ONLY', 'STORE_ONLY']
+      - name: customer_value_tier
+        tests:
+          - accepted_values:
+              values: ['VIP_TIER', 'GOLD_TIER', 'STANDARD_TIER']
+
+  - name: dim_products
+    description: "Dimension table of products enriched with lifetime sales velocity"
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+      - name: product_sales_velocity
+        tests:
+          - accepted_values:
+              values: ['TOP_SELLER', 'STEADY_PERFORMER', 'LONG_TAIL']

@@ -1,0 +1,22 @@
+# RetailPulse Production ELT Stack Dependencies
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+faker
+faker-commerce
+psycopg2-binary
+python-dotenv
+requests
+boto3
+botocore
+pyarrow
+pandas
+snowflake-connector-python[pandas]
+snowflake-sqlalchemy
+dbt-core
+dbt-snowflake
+pytest
+sqlfluff
+ruff
+duckdb

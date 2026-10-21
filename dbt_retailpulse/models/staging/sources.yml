@@ -1,0 +1,49 @@
+version: 2
+
+sources:
+  - name: raw_ecommerce
+    database: "{{ env_var('SNOWFLAKE_DATABASE', 'RETAILPULSE_DW') }}"
+    schema: RAW
+    tables:
+      - name: ecommerce_orders_raw
+        description: "Raw landed orders from E-commerce REST API"
+        loaded_at_field: _loaded_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+        columns:
+          - name: order_id
+            tests:
+              - not_null
+      - name: ecommerce_order_items_raw
+        description: "Raw order line items flattened during REST extraction"
+        loaded_at_field: _loaded_at
+
+  - name: raw_pos
+    database: "{{ env_var('SNOWFLAKE_DATABASE', 'RETAILPULSE_DW') }}"
+    schema: RAW
+    tables:
+      - name: pos_transactions_raw
+        description: "Point-of-sale in-store transactions from Supabase PostgreSQL"
+        loaded_at_field: _loaded_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+      - name: pos_stores_raw
+        description: "Store reference dimension extracted from POS database"
+      - name: pos_products_raw
+        description: "Product catalog reference dimension extracted from POS database"
+
+  - name: raw_threepl
+    database: "{{ env_var('SNOWFLAKE_DATABASE', 'RETAILPULSE_DW') }}"
+    schema: RAW
+    tables:
+      - name: threepl_inventory_raw
+        description: "Daily warehouse inventory snapshots from 3PL partner CSV drops"
+        loaded_at_field: _loaded_at
+        freshness:
+          warn_after: {count: 24, period: hour}
+          error_after: {count: 36, period: hour}
+      - name: threepl_shipments_raw
+        description: "Daily warehouse carrier shipments from 3PL partner CSV drops"
+        loaded_at_field: _loaded_at
